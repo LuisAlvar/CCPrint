@@ -1,0 +1,9 @@
+{
+  "LogFlushPath":"/Users/luisalvarez/Documents/projects/nasx/logs",
+  "Invariants": {
+    "BaseLogFileName": "LogFileAppSettings_",
+    "BaseLogFileExtension": ".txt",
+    "LogDelimited": "|",
+    "ProgramFileType": "cs"
+  }
+}
