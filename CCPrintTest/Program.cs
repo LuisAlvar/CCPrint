@@ -30,4 +30,4 @@ SubTest.ToWork(ref cln);
 
 //Console.WriteLine(cln.FindClassPath($"/Users/luisalvarez/Documents/projects/proclogger/ProcLoggerAPI.EFCore", "AppEFCoreDbContextFactor"));
 
-//CCPrint.EFCore.AppEFCoreDbContextFactor _factor = new CCPrint.EFCore.AppEFCoreDbContextFactor(ref cln);
+CCPrint.EFCore.AppEFCoreDbContextFactor _factor = new CCPrint.EFCore.AppEFCoreDbContextFactor(ref cln);

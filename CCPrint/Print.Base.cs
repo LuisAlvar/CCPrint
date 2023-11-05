@@ -28,7 +28,7 @@ namespace CCPrint
     private ConcurrentBag<string> _collection = new ConcurrentBag<string>();
 
     /// <summary>
-    /// 
+    /// Main Constructor: Only given the configuration setting for finding the log message statement
     /// </summary>
     /// <param name="configuration"></param>
     public Print(IConfiguration configuration)
@@ -38,7 +38,7 @@ namespace CCPrint
     }
 
     /// <summary>
-    /// 
+    /// Constructor: Given the configuration setting for finding the log message statement and root directory where the project is currently running. 
     /// </summary>
     /// <param name="configuration"></param>
     /// <param name="rootDirectory"></param>
@@ -52,7 +52,7 @@ namespace CCPrint
   }
 
   /// <summary>
-  /// 
+  /// TextLine is a object utilized to save the confidence rate of it likely being the log message found within a file, hence, we save the line number from the file. 
   /// </summary>
   public class TextLine
   {

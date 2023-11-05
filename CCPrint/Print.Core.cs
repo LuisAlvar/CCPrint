@@ -32,10 +32,6 @@ namespace CCPrint
       return $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}" + _invar.LogDelimited;
     }
 
-
-
-
-
     /// <summary>
     /// Private Method: Recursive function to find all possible sub directories from a given path                                   
     /// <param name="ArbPath">This is the root directory</param>
@@ -44,17 +40,19 @@ namespace CCPrint
     private string ChildNodeFolder(string ArbPath, ref ConcurrentBag<string> container)
     {
       if (!Directory.GetDirectories(ArbPath).ToList().Any()) return ArbPath;
-
       foreach (var item in Directory.GetDirectories(ArbPath).ToList())
       {
         container.Add(ChildNodeFolder(item, ref container));
       }
-
       return ArbPath;
     }
 
-
-
+    /// <summary>
+    /// Calculating the confidence rate of a given text line
+    /// </summary>
+    /// <param name="dataline">A text line a file</param>
+    /// <param name="keyword">The log message converted into a list of keywords</param>
+    /// <returns></returns>
     private double ProcessLine(string dataline, List<string> keyword)
     {
       double confRate = 100.0 / keyword.Count() + 1;
@@ -68,10 +66,14 @@ namespace CCPrint
       return confidence;
     }
 
+    /// <summary>
+    /// Selecting the text line of the file with the highest confidence rate.
+    /// </summary>
+    /// <param name="TextByLines">the file converted into a list of text lines</param>
+    /// <param name="keywords">the log message converted into a list of keywords</param>
+    /// <returns></returns>
     private TextLine SelectLine(List<string> TextByLines, List<string> keywords)
     {
-      List<TextLine> lstTotalLines = new List<TextLine>();
-
       int counter = 1;
       double max = 0.0;
       TextLine located = new TextLine(0, 0);
@@ -90,6 +92,12 @@ namespace CCPrint
       return located;
     }
 
+    /// <summary>
+    /// Finding the log message within the file 
+    /// </summary>
+    /// <param name="File">The file believed to have the log message</param>
+    /// <param name="Message">The log messag the user logged</param>
+    /// <returns></returns>
     private int FindCodeLine(string File, string Message)
     {
       List<string> lines = System.IO.File.ReadAllLines(File).ToList();
@@ -119,9 +127,10 @@ namespace CCPrint
 
       string fileWithTargetClass = FindFilePathBasedOnClass(ExecutionSpacePath, ClassName);
 
+      if(_invar.DebugMode) Console.WriteLine($"This is the file with the target class: {fileWithTargetClass}");
 
       //Now, check if the filename contains both the class name, method name
-      bool bCheck = CheckFileContainsMethodName(fileWithTargetClass, ClassName, MethodName);
+      bool bCheck = CheckFileContainsClassNameAndMethodName(fileWithTargetClass, ClassName, MethodName);
       bool isExist = File.Exists(fileWithTargetClass);
 
       if (!isExist)
@@ -132,7 +141,7 @@ namespace CCPrint
       return (bCheck) ? fileWithTargetClass : string.Empty;
     }
 
-    private bool CheckFileContainsMethodName(string file, string classname, string methodname)
+    private bool CheckFileContainsClassNameAndMethodName(string file, string classname, string methodname)
     {
       Regex rxMethodFunction = new Regex($"{methodname}(.*?)");
       Regex rxClassName = new Regex($"class {classname}");
@@ -152,8 +161,10 @@ namespace CCPrint
 
         if(bContainsClass && rxMethodFunction.IsMatch(item))
         {
-          Console.WriteLine("class detected : " + strClassline);
-          Console.WriteLine("Method detected: " + item);
+          if(_invar.DebugMode){
+            Console.WriteLine("class detected : " + strClassline);
+            Console.WriteLine("Method detected: " + item);
+          }
           bContainsMethod = true;
         }
       }
@@ -191,8 +202,10 @@ namespace CCPrint
       }
       // Next, check all file within a current path directory that may contain the class name 
       response = DoesFileExistWithTopDirFiles(ArbPath, ClassName);
-      if (!string.IsNullOrEmpty(response)) return response;
-
+      if (!string.IsNullOrEmpty(response)) {
+        if (_invar.DebugMode) Console.WriteLine("DoesFileExistsWithTopDirFiles:: " + response);
+        return response;
+      }
 
       if (_invar.DebugMode && response == string.Empty) Console.WriteLine("Unable to find with the top dir: FileTypeClass.cs or a File contains the target class");
 
@@ -305,11 +318,8 @@ namespace CCPrint
     private string DoesTargetClassExistsWithinThisFile(string FilePathName, string TargetClass)
     {
       List<string> lstTextWithiFile = File.ReadAllLines(FilePathName).ToList();
-      string fileName = string.Empty;
-
-      fileName = lstTextWithiFile.Where(strLine => strLine.Contains("class") && strLine.Contains(TargetClass)).FirstOrDefault() ?? String.Empty;
-
-      return fileName;
+      string fileName = lstTextWithiFile.Where(strLine => strLine.Contains("class") && strLine.Contains(TargetClass)).FirstOrDefault() ?? String.Empty;
+      return (!string.IsNullOrEmpty(fileName)) ? FilePathName : string.Empty;
     }
 
     private string DoesTargetClassExistsWithinADir(string ArbPath, string TargetClass)

@@ -16,7 +16,8 @@ public partial class Print: CCPrint.IPrint
   public void Message(StackFrame Frame, Assembly Ably, LogPrintType LogType, string ConsoleMessage)
   {
     MethodBase? callingMethod = Frame.GetMethod();
-    string strCallingMethodNameFormated = string.Empty; 
+    string strCallingMethodNameFormated;
+    bool bMethodWasConstructor = false;
 
     if (callingMethod == null)
     {
@@ -40,7 +41,13 @@ public partial class Print: CCPrint.IPrint
       if (callingMethod.Name.ToString().Contains("$"))
       {
         strCallingMethodNameFormated = callingMethod.Name.ToString().Replace("<", "").Replace(">", "").Replace("$", "");
-      } else
+      } 
+      else if (callingMethod.Name.ToString().ToLower().Contains(".ctor"))
+      {
+        strCallingMethodNameFormated = targetClassName.Name.ToString();
+        bMethodWasConstructor = true;
+      }
+      else
       {
         strCallingMethodNameFormated = callingMethod.Name.ToString();
       }
@@ -64,6 +71,10 @@ public partial class Print: CCPrint.IPrint
         fileClass = fileClass.Replace(_rootDir, string.Empty);
         int firstInstance = fileClass.IndexOf(Path.DirectorySeparatorChar);
         fileClass = fileClass.Substring(firstInstance + 1, fileClass.Length - 1);
+      }
+
+      if(bMethodWasConstructor){
+        strCallingMethodNameFormated = ".ctor";
       }
 
       string formatCallingClass = $"{targetClassName.Name.ToString().ToLower()}" + _invar.LogDelimited;
