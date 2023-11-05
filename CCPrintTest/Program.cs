@@ -15,7 +15,7 @@ var config = new ConfigurationBuilder()
 string info = "important info to log";
 
 var cln = new CCPrint.Print(config.Build(), Directory.GetCurrentDirectory());
-cln.Message(new StackFrame(), System.Reflection.Assembly.GetExecutingAssembly(), CCPrint.LogTimeType.Local, CCPrint.LogPrintType.Information, $"message local cluster {info}");
+cln.Message(new StackFrame(), System.Reflection.Assembly.GetExecutingAssembly(), CCPrint.LogPrintType.Information, $"message local cluster {info}");
 //cln.Flush("Stage1");
 
 Test.ToWork(ref cln);

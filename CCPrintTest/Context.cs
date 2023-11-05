@@ -22,7 +22,7 @@ namespace CCPrint.EFCore
   {
     public AppEFCoreDbContextFactor(ref CCPrint.Print pint)
     {
-      pint.Message(new StackFrame(), Assembly.GetExecutingAssembly(), 73, CCPrint.LogTimeType.Local, CCPrint.LogPrintType.Information, $"Env Target Variable");
+      pint.Message(new StackFrame(), Assembly.GetExecutingAssembly(), CCPrint.LogPrintType.Information, $"Env Target Variable");
     } 
   }
 
