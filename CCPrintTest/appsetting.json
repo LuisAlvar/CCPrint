@@ -5,6 +5,7 @@
     "LogDelimited": "|",
     "ProgramFileType": "cs",
     "LogFlushDir": "C:/projects/Logs",
-    "DebugMode": true
+    "ExcludeFolderTypes": ["bin","obj"],
+    "DebugMode": false
   }
 }

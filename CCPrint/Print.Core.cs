@@ -126,7 +126,6 @@ namespace CCPrint
       }
 
       string fileWithTargetClass = FindFilePathBasedOnClass(ExecutionSpacePath, ClassName);
-
       if(_invar.DebugMode) Console.WriteLine($"This is the file with the target class: {fileWithTargetClass}");
 
       //Now, check if the filename contains both the class name, method name
@@ -171,6 +170,7 @@ namespace CCPrint
 
       if (classname.ToLower().Contains("program") && methodname.ToLower().Contains("main"))
       {
+        if (_invar.DebugMode) Console.WriteLine("Special case where program class and main does not exist within file in .NET 6");
         bContainsClass = bContainsMethod = true;
       }
         
@@ -182,7 +182,6 @@ namespace CCPrint
     /// </summary>
     private string FindFilePathBasedOnClass(string ArbPath, string ClassName)
     {
-      // if the target clas is within the first folder then quick exit 
       string strTargetClassFile = ClassName + "." + _invar.ProgramFileType;
       string response = string.Empty;
 
@@ -209,13 +208,20 @@ namespace CCPrint
 
       if (_invar.DebugMode && response == string.Empty) Console.WriteLine("Unable to find with the top dir: FileTypeClass.cs or a File contains the target class");
 
+      //2. Depth-Search Approach
+      if (_invar.DebugMode)
+      {
+        Console.WriteLine("Apply Depth-Search Approach");
+        Console.WriteLine($"Looking for the following file :: {strTargetClassFile} ");
+      }
+
       // Next, Check if there is a file type of SubTest.cs within all sub folders
-      // find all of the subdirectory within this root path
+      // find all of the subdirectory within this root path expoect for any bin or obj folders. 
       ConcurrentBag<string> lstOfSubDir = new ConcurrentBag<string>();
 
       foreach (var item in Directory.GetDirectories(ArbPath))
       {
-        if (!(item.Contains("bin") || item.Contains("obj")))
+        if (!(_invar.ExcludeFolderTypes.Where(t => item.Contains(t)).Any()))
         {
           lstOfSubDir.Add(ChildNodeFolder(item, ref lstOfSubDir));
         }
@@ -251,7 +257,7 @@ namespace CCPrint
 
         if (string.IsNullOrEmpty(result) && DoesFileExistWithinTopDir(currFolder, strTargetClassFile))
         {
-          response = currFolder + Path.DirectorySeparatorChar + strTargetClassFile;
+          response = Path.Join(currFolder, strTargetClassFile);
           state.Break();
         }
       });

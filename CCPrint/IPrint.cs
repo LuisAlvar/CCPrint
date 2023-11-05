@@ -18,7 +18,7 @@ public interface IPrint
 
     public void Message(StackFrame Frame, Assembly Ably, LogPrintType LogType, string ConsoleMessage);
 
-    //public void Message(StackFrame Frame, Assembly Ably, LogPrintType LogType, string ConsoleMessage, object DataObject);
+    public void Message(StackFrame Frame, Assembly Ably, LogPrintType LogType, string ConsoleMessage, object DataObject);
 
     public void Flush(string EndOfStageName);
 }
