@@ -5,8 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.2.80</Version>
-    <ReleaseVersion>1.2.80</ReleaseVersion>
+    <Version>1.2.81</Version>
+    <ReleaseVersion>1.2.81</ReleaseVersion>
     <Authors>Luis Alvarez</Authors>
     <Company>Software Group LLC</Company>
     <!-- to auto run dotnet pack whenever you run dotnet build, set the following property to true -->

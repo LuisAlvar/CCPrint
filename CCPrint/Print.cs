@@ -106,6 +106,11 @@ public partial class Print: CCPrint.IPrint
       _collection.Add(polishedStr);
       System.Console.WriteLine(polishedStr);
 
+      if (_invar.IsUnitTesting)
+      {
+        Debug.WriteLine(polishedStr);
+      }
+
       System.Console.ResetColor();
     }
   
@@ -218,6 +223,11 @@ public partial class Print: CCPrint.IPrint
 
       _collection.Add(polishedStr);
       System.Console.WriteLine(polishedStr);
+
+      if (_invar.IsUnitTesting)
+      {
+        Debug.WriteLine(polishedStr);
+      }
 
       System.Console.ResetColor();
     }

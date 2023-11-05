@@ -9,4 +9,5 @@ internal class Invariants
   public string LogFlushDir { get; set; } = "";
   public bool DebugMode { get; set; } = false;
   public string[] ExcludeFolderTypes { get; set; } = new string[1] { "bin" };
+  public bool IsUnitTesting { get; set; } = false;
 }
